@@ -44,9 +44,9 @@ const gameObject = [
         ]
     },
     {
-        id: 4,
+        id: 2,
         image: "https://www.cantodosclassicos.com/wp-content/uploads/2016/03/tarantino-video-cima-baixo-tarantino-from-below.jpg",
-        correct: 0,
+        correct: 4,
         options: [
             "Kick-Ass",
             "Guerra Mundial Z",
