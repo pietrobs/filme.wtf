@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,11 +8,15 @@
     <title>filme.wtf</title>
     <link rel="stylesheet" href="./assets/css/index.css">
 </head>
+
 <body>
-    
+
     <div class="container">
-        
-        <img id="banner" />
+
+        <div id="click-indicator">
+            <img id="banner" />
+        </div>
+        <span class="tip">Clique na imagem para ver mais cenas</span>
 
         <h1 id="title">Que filme é esse?</h1>
 
@@ -23,20 +28,27 @@
     </div>
 
     <div id="modal-share" class="modal">
-        <h1>Compartilhe!</h1>
+        <div className="container">
 
-        <p id="result"></p>
+            <h1>Compartilhe!</h1>
 
-        <button id="share">Compartilhar</button>
+            <p id="result"></p>
+            <p id="result-str"></p>
 
-        <p>#filme.wtf</p>
-        
-        <p>Volte amanhã para jogar novamente!</p>
+            <button id="share">Compartilhar</button>
+
+            <p>#filme.wtf</p>
+
+            <p>Volte amanhã para jogar novamente!</p>
+        </div>
     </div>
 
-    
+
 
 </body>
+
 </html>
 
+
+<script src="./assets/js/current-game.js"></script>
 <script src="./assets/js/index.js"></script>

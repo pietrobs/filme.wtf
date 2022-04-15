@@ -1,54 +1,36 @@
-const gameObject = [
-    {
-        id: 1,
-        image: "https://l3apq3bncl82o596k2d1ydn1-wpengine.netdna-ssl.com/wp-content/uploads/2019/10/JohnWickVRFightScene.jpg",
-        correct: 1,
-        options: [
-            "Matrix Reloaded",
-            "John Wick 3",
-            "Siberia",
-            "Constantine",
-            "O Advogado do Diabo",
-        ]
-    },
-    {
-        id: 2,
-        image: "https://www.cantodosclassicos.com/wp-content/uploads/2016/03/tarantino-video-cima-baixo-tarantino-from-below.jpg",
-        correct: 4,
-        options: [
-            "Kick-Ass",
-            "Guerra Mundial Z",
-            "O Clube da Luta",
-            "A Vida é Bela",
-            "Bastardos Inglorios",
-        ]
-    },
-    {
-        id: 3,
-        image: "https://static.standard.co.uk/s3fs-public/thumbnails/image/2016/03/09/10/baywatchfilm0903a.jpg?width=968",
-        correct: 2,
-        options: [
-            "O Rei do Show",
-            "High School Musical 2",
-            "Baywatch",
-            "Vizinhos",
-            "Curta Essa com Zac Efron",
-        ]
-    }
-];
+
 
 const gameVariables = {
     gameIndex: 0,
+    imageIndex: 0,
     historic: [],
 }
 
-function renderGame(index) {
+function handleImageClick() {
+    const currentGame = getCurrentGame();
+    gameVariables.imageIndex++;
+
+    if (gameVariables.imageIndex >= gameObject[gameVariables.gameIndex].images.length) {
+        gameVariables.imageIndex = 0;
+    }
+
+    renderImage(currentGame.images[gameVariables.imageIndex]);
+}
+
+function renderGame() {
+    const currentGame = getCurrentGame();
+    const clickIndicator = document.getElementById("click-indicator");
+
+    if (currentGame == null) {
+        renderShare();
+    }
+
     resetTitle();
 
-    const currentGame = gameObject[index];
+    clickIndicator.onclick = handleImageClick;
 
-    const banner = document.getElementById("banner");
-    banner.src = currentGame.image;
+
+    renderImage(currentGame.images[gameVariables.imageIndex]);
 
     clearOptions();
 
@@ -57,6 +39,11 @@ function renderGame(index) {
 
         renderOption(option, i, currentGame.correct, currentGame.options[currentGame.correct]);
     }
+}
+
+function renderImage(image) {
+    const banner = document.getElementById("banner");
+    banner.src = image;
 }
 
 function clearOptions() {
@@ -82,17 +69,14 @@ function renderOption(name, index, correctIndex, correctTitle) {
             gameVariables.historic.push(false);
         }
 
-        gameVariables.gameIndex++;
+        storeHistoric();
 
         changeTitle(correctTitle);
 
         await new Promise(resolve => setTimeout(resolve, 2000));
 
-        if (gameVariables.gameIndex < gameObject.length) {
-            renderGame(gameVariables.gameIndex);
-        } else {
-            renderShare();
-        }
+        nextRound();
+
     }
 
     ul.appendChild(li);
@@ -100,15 +84,31 @@ function renderOption(name, index, correctIndex, correctTitle) {
     return li;
 }
 
+const now = new Date();
+const storageDailyKey = now.getDate() + "-" + (now.getMonth() + 1) + "-" + now.getFullYear();
+
+function storeHistoric() {
+
+    localStorage.setItem(storageDailyKey, JSON.stringify(gameVariables.historic));
+}
+
+function getHistoric() {
+    const historic = localStorage.getItem(storageDailyKey);
+    return historic ? JSON.parse(historic) : [];
+}
+
 function renderShare() {
     const result = document.getElementById("result");
+    const resultStr = document.getElementById("result-str");
     const modal = document.getElementById("modal-share");
     const shareBtn = document.getElementById("share");
 
-    modal.style.display = "block";
+    modal.style.display = "flex";
 
+    const shareResult = getShareResult();
     const shareString = getShareString();
-    result.innerHTML = shareString;
+    resultStr.innerHTML = shareString;
+    result.innerHTML = shareResult;
 
     shareBtn.onclick = () => {
 
@@ -145,19 +145,21 @@ function copyToClipboard(str) {
     alert("Copiado para área de transferência!");
 }
 
-function getShareString() {
-    var shareString = ""
-    var corrects = 0;
+function getShareResult() {
+    var result = "";
 
     for (let i = 0; i < gameVariables.historic.length; i++) {
         const isCorrect = gameVariables.historic[i];
 
-        shareString += isCorrect ? "🟩" : "🟥";
-
-        if (isCorrect) {
-            corrects++;
-        }
+        result += isCorrect ? "🟩" : "🟥";
     }
+
+    return result;
+}
+
+function getShareString() {
+    var shareString = ""
+    var corrects = gameVariables.historic.filter(r => r).length;
 
     shareString += "\n\n Joguei filme.wtf e acertei " + corrects + " de " + gameVariables.historic.length + " filmes!";
     return shareString;
@@ -172,7 +174,28 @@ function resetTitle() {
     changeTitle("Que filme é esse?");
 }
 
+function getCurrentGame() {
+    return gameObject[gameVariables.gameIndex];
+}
+
+function nextRound() {
+    gameVariables.imageIndex = 0;
+    gameVariables.gameIndex++;
+    if (gameVariables.gameIndex < gameObject.length) {
+        renderGame();
+    } else {
+        renderShare();
+    }
+
+}
+
+function loadInitialVariables() {
+    const historic = getHistoric();
+    gameVariables.historic = historic;
+    gameVariables.gameIndex = historic.length;
+}
 
 (function () {
-    renderGame(gameVariables.gameIndex);
+    loadInitialVariables();
+    renderGame();
 })();
