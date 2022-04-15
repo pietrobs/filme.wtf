@@ -73,7 +73,7 @@ html, body{
     cursor: pointer;
 }
 
-footer {
+footer a{
     position: absolute;
     color: white;
     top: 4px;

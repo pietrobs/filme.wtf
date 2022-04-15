@@ -17,18 +17,32 @@ function handleImageClick() {
     renderImage(currentGame.images[gameVariables.imageIndex]);
 }
 
+var resetClicks = 0;
 function renderGame() {
     const currentGame = getCurrentGame();
     const clickIndicator = document.getElementById("click-indicator");
     const hack = document.getElementById("hack");
 
+    hack.onclick = () => {
+        resetClicks++;
+
+        if (resetClicks == 3) {
+            alert("Resetando game...")
+            localStorage.clear();
+            window.location.reload();
+        }
+    }
+
     if (currentGame == null) {
         renderShare();
+
+
+        return;
     }
 
     resetTitle();
 
-    hack.onclick = () => localStorage.clear();
+
     clickIndicator.onclick = handleImageClick;
 
 
@@ -53,6 +67,7 @@ function clearOptions() {
     ul.innerHTML = "";
 }
 
+var blockClick = false;
 function renderOption(name, index, correctIndex, correctTitle) {
     const ul = document.getElementById("options");
     const li = document.createElement("li");
@@ -61,7 +76,10 @@ function renderOption(name, index, correctIndex, correctTitle) {
     li.innerHTML = name;
 
     li.onclick = async () => {
+        if (blockClick) return;
+
         const isCorrect = index === correctIndex;
+        blockClick = true;
 
         // window.analytics.logEvent('select_option', {
         //     isCorrect: isCorrect,
@@ -77,11 +95,15 @@ function renderOption(name, index, correctIndex, correctTitle) {
             gameVariables.historic.push(false);
         }
 
+
+
         storeHistoric();
 
         changeTitle(correctTitle);
 
         await new Promise(resolve => setTimeout(resolve, 2000));
+
+        blockClick = false;
 
         nextRound();
 
