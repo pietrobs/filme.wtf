@@ -1,5 +1,4 @@
 
-
 const gameVariables = {
     gameIndex: 0,
     imageIndex: 0,
@@ -35,8 +34,6 @@ function renderGame() {
 
     if (currentGame == null) {
         renderShare();
-
-
         return;
     }
 
@@ -81,12 +78,6 @@ function renderOption(name, index, correctIndex, correctTitle) {
         const isCorrect = index === correctIndex;
         blockClick = true;
 
-        // window.analytics.logEvent('select_option', {
-        //     isCorrect: isCorrect,
-        //     clicked: name,
-        //     correct: correctTitle,
-        // });
-
         if (isCorrect) {
             li.className += " correct";
             gameVariables.historic.push(true);
@@ -94,8 +85,6 @@ function renderOption(name, index, correctIndex, correctTitle) {
             li.className += " wrong";
             gameVariables.historic.push(false);
         }
-
-
 
         storeHistoric();
 
@@ -118,7 +107,6 @@ const now = new Date();
 const storageDailyKey = now.getDate() + "-" + (now.getMonth() + 1) + "-" + now.getFullYear();
 
 function storeHistoric() {
-
     localStorage.setItem(storageDailyKey, JSON.stringify(gameVariables.historic));
 }
 
@@ -128,8 +116,6 @@ function getHistoric() {
 }
 
 function renderShare() {
-
-
     const result = document.getElementById("result");
     const resultStr = document.getElementById("result-str");
     const modal = document.getElementById("modal-share");
@@ -139,22 +125,13 @@ function renderShare() {
 
     const shareResult = getShareResult();
     const shareString = getShareString();
+
     resultStr.innerHTML = shareString;
     result.innerHTML = shareResult;
-
-    // window.analytics.logEvent('render_share', {
-    //     result: shareResult,
-    //     resultStr: shareString,
-    // });
 
     const fullShareString = shareResult + "\n\n" + shareString;
 
     shareBtn.onclick = () => {
-
-        // window.analytics.logEvent('share', {
-        //     result: shareResult,
-        //     resultStr: shareString,
-        // });
 
         try {
             if (navigator.share) {
