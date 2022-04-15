@@ -1,0 +1,119 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+html, body{
+    background-color: #2f2f2f;
+    height: 100%;
+    overflow: hidden;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    height: 100%;
+}
+
+#banner {
+    height: 300px;
+    margin: 24px
+}
+
+#title {
+    color: white;
+}
+
+
+#options {
+    list-style: none;
+    margin: 24px;
+    padding: 0;
+}
+
+.option {
+    border: 1px solid white;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 24px;
+    margin-top: 8px;
+    width: 80vw;
+    color: #dfdfdf
+}
+
+.correct {
+    background-color: #037403;
+}
+
+.wrong {
+    background-color: #800606;
+}
+
+.option:hover {
+    transition: .3s;
+    background-color: #222;
+    cursor: pointer;
+}
+
+/* banner full screen on mobile */
+@media (max-width: 768px) {
+    #options, #banner{
+        margin: 0px;
+    }
+
+    #banner {
+        width: 100%;
+    }
+
+    .option:hover {
+    transition: .3s;
+    background-color: #2f2f2f;
+    cursor: pointer;
+    }
+}
+
+.wrong:hover {
+    background-color: #800606;
+}
+
+.correct:hover{
+    background-color: #037403;
+}
+
+
+/* Modal */
+
+#modal-share{
+    display: none;
+}
+
+.modal {
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.7);
+
+    text-align: center;
+
+    color: white;
+}
+
+.modal h1, .modal p, .modal #result, .modal button{
+    margin-bottom: 24px;
+}
+
+/* Button */
+
+button {
+    padding: 8px 16px;
+}
