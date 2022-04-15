@@ -63,11 +63,11 @@ function renderOption(name, index, correctIndex, correctTitle) {
     li.onclick = async () => {
         const isCorrect = index === correctIndex;
 
-        analytics.logEvent('select_option', {
-            isCorrect: isCorrect,
-            clicked: name,
-            correct: correctTitle,
-        });
+        // window.analytics.logEvent('select_option', {
+        //     isCorrect: isCorrect,
+        //     clicked: name,
+        //     correct: correctTitle,
+        // });
 
         if (isCorrect) {
             li.className += " correct";
@@ -120,17 +120,17 @@ function renderShare() {
     resultStr.innerHTML = shareString;
     result.innerHTML = shareResult;
 
-    analytics.logEvent('render_share', {
-        result: shareResult,
-        resultStr: shareString,
-    });
+    // window.analytics.logEvent('render_share', {
+    //     result: shareResult,
+    //     resultStr: shareString,
+    // });
 
     shareBtn.onclick = () => {
 
-        analytics.logEvent('share', {
-            result: shareResult,
-            resultStr: shareString,
-        });
+        // window.analytics.logEvent('share', {
+        //     result: shareResult,
+        //     resultStr: shareString,
+        // });
 
         try {
             if (navigator.share) {
