@@ -20,6 +20,7 @@ function handleImageClick() {
 function renderGame() {
     const currentGame = getCurrentGame();
     const clickIndicator = document.getElementById("click-indicator");
+    const hack = document.getElementById("hack");
 
     if (currentGame == null) {
         renderShare();
@@ -27,6 +28,7 @@ function renderGame() {
 
     resetTitle();
 
+    hack.onclick = () => localStorage.clear();
     clickIndicator.onclick = handleImageClick;
 
 
@@ -60,6 +62,12 @@ function renderOption(name, index, correctIndex, correctTitle) {
 
     li.onclick = async () => {
         const isCorrect = index === correctIndex;
+
+        analytics.logEvent('select_option', {
+            isCorrect: isCorrect,
+            clicked: name,
+            correct: correctTitle,
+        });
 
         if (isCorrect) {
             li.className += " correct";
@@ -98,6 +106,8 @@ function getHistoric() {
 }
 
 function renderShare() {
+
+
     const result = document.getElementById("result");
     const resultStr = document.getElementById("result-str");
     const modal = document.getElementById("modal-share");
@@ -110,7 +120,17 @@ function renderShare() {
     resultStr.innerHTML = shareString;
     result.innerHTML = shareResult;
 
+    analytics.logEvent('render_share', {
+        result: shareResult,
+        resultStr: shareString,
+    });
+
     shareBtn.onclick = () => {
+
+        analytics.logEvent('share', {
+            result: shareResult,
+            resultStr: shareString,
+        });
 
         try {
             if (navigator.share) {
