@@ -147,6 +147,8 @@ function renderShare() {
     //     resultStr: shareString,
     // });
 
+    const fullShareString = shareResult + "\n\n" + shareString;
+
     shareBtn.onclick = () => {
 
         // window.analytics.logEvent('share', {
@@ -158,17 +160,17 @@ function renderShare() {
             if (navigator.share) {
                 const shareData = {
                     title: 'filme.wtf',
-                    text: shareString,
+                    text: fullShareString,
                     url: 'https://filme.wtf',
                 }
 
                 navigator.share(shareData);
             } else if (navigator.clipboard) {
-                navigator.clipboard.writeText(shareString).then(function () {
+                navigator.clipboard.writeText(fullShareString).then(function () {
                     alert("Copiado para área de transferência!");
                 });
             } else {
-                copyToClipboard(shareString);
+                copyToClipboard(fullShareString);
             }
         } catch (err) {
             alert(err);
